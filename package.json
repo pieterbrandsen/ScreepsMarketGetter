@@ -1,0 +1,18 @@
+{
+  "name": "a",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "forever-monitor": "^3.0.3",
+    "lodash": "^4.17.21",
+    "screeps-api": "^1.16.0",
+    "winston": "^3.7.2"
+  }
+}

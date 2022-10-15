@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  nodejs:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - "./dailyFiles:/usr/screepsmarket/dailyFiles"
+      - "./completeFiles:/usr/screepsmarket/completeFiles"
+      - "./compressedFiles:/usr/screepsmarket/compressedFiles"

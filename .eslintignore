@@ -1,0 +1,11 @@
+# Folders
+node_modules
+
+# File types
+**/*.json
+**/*.yml
+**/*.ini
+**/*.sh
+
+# Files
+Dockerfile
