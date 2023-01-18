@@ -2,6 +2,8 @@ version: '3'
 
 services:
   nodejs:
+    ports:
+      - "10000:10000"
     build: .
     restart: unless-stopped
     volumes:

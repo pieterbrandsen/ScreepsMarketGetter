@@ -3,6 +3,26 @@ import _ from "lodash";
 import winston from "winston";
 import detailedData from "./src/detailedData.js";
 import dailyData from "./src/dailyData.js";
+import fs from "fs";
+
+import express from 'express'
+const app = express()
+const port = 10000
+
+app.get('/', (req, res) => {
+  const lastDailyFile = fs.readdirSync('./dailyFiles').sort().reverse()[0];
+  const lastCompleteFile = fs.readdirSync('./completeFiles').sort().reverse()[0];
+  const now = new Date();
+  
+  const diffDailyDays = Math.ceil(Math.abs(parseInt(now.getTime()) - parseInt(lastDailyFile)) / (1000 * 60 * 60 * 24));
+  const diffCompleteMinutes = Math.ceil(Math.abs(parseInt(now.getTime()) - parseInt(lastCompleteFile)) / (1000 * 60));
+
+  const online = diffDailyDays < 5 && diffCompleteMinutes < 60;
+  res.send(online)
+})
+app.listen(port, () => {
+  console.log(`App listening at http://localhost:${port}`)
+})
 
 const logger = winston.createLogger({
   format: winston.format.combine(
