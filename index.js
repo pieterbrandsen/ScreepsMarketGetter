@@ -4,8 +4,10 @@ import winston from "winston";
 import detailedData from "./src/detailedData.js";
 import dailyData from "./src/dailyData.js";
 import fs from "fs";
-
+import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 import express from 'express'
+
+dotenv.config()
 const app = express()
 const port = 10000
 
@@ -39,7 +41,7 @@ const logger = winston.createLogger({
   try {
     // Setup
     const api = new ScreepsAPI();
-    await api.auth("PandaMaster", "Aut0wiel!"); // authenticate
+    await api.auth(process.env.SCREEPS_USERNAME, process.env.SCREEPS_PASSWORD); // authenticate
     await api.socket.connect(); // connect socket
 
     const emptyDetailedShardsData = {

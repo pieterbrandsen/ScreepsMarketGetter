@@ -10,6 +10,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "forever-monitor": "^3.0.3",
     "lodash": "^4.17.21",
