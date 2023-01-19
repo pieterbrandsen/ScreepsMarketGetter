@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
   const diffCompleteMinutes = Math.ceil(Math.abs(parseInt(now.getTime()) - parseInt(lastCompleteFile)) / (1000 * 60));
 
   const online = diffDailyDays < 5 && diffCompleteMinutes < 60;
-  res.send(online)
+  res.send({result: online, lastDailyFile, lastCompleteFile, diffDailyDays, diffCompleteMinutes})
 })
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`)
