@@ -1,7 +1,12 @@
+import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+dotenv.config()
+
 import winston from "winston";
 import fs from "fs";
 import _ from "lodash";
+import graphite from "graphite";
 
+const client = graphite.createClient(`plaintext://host.docker.internal:${process.env.RELAY_PORT}/`);
 const logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp(),
@@ -35,7 +40,8 @@ async function UploadJson(obj) {
 });
 
     _.forEach(datedDailyReports, (shardReports, reportTime) => {
-        const json = JSON.stringify(shardReports);
+        let json = JSON.stringify(shardReports);
+        const time = Math.floor(reportTime);
         try {
           const uploaded = JSON.parse(fs.readFileSync(`./dailyFiles/${Math.floor(reportTime)}.json`));
           const shards = Object.keys(uploaded);
@@ -44,9 +50,12 @@ async function UploadJson(obj) {
             if (!shardReports[shard]) shardReports[shard] = uploaded[shard];
           }
           json = JSON.stringify(shardReports);
-          fs.writeFileSync(`./dailyFiles/${Math.floor(reportTime)}.json`, json);
+          if (process.env.RELAY_PORT) client.write(shardReports, function(err) {
+            if (err) logger.error(err)
+          });
+          fs.writeFileSync(`./dailyFiles/${time}.json`, json);
         } catch (error) {
-          fs.writeFileSync(`./dailyFiles/${Math.floor(reportTime)}.json`, json);
+          fs.writeFileSync(`./dailyFiles/${time}.json`, json);
         }
     });
 }
