@@ -6,7 +6,8 @@ import fs from "fs";
 import _ from "lodash";
 import graphite from "graphite";
 
-const client = graphite.createClient(`plaintext://host.docker.internal:${process.env.RELAY_PORT}/`);
+const isWindows = process.platform === 'win32';
+const client = graphite.createClient(`plaintext://${isWindows ? "host.docker.internal" : "172.17.0.1"}:${process.env.RELAY_PORT}/`);
 const logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp(),
