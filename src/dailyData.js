@@ -5,6 +5,7 @@ import winston from "winston";
 import fs from "fs";
 import _ from "lodash";
 import graphite from "graphite";
+import convertDailyData from "./convertDailyData.js";
 
 const isWindows = process.platform === 'win32';
 const client = graphite.createClient(`plaintext://${isWindows ? "host.docker.internal" : "172.17.0.1"}:${process.env.RELAY_PORT}/`);
@@ -20,45 +21,50 @@ const logger = winston.createLogger({
 });
 
 async function UploadJson(obj) {
-    let twoDaysAgoTime = new Date(new Date().setDate(new Date().getDate()-2)).getTime();
+  let twoDaysAgoTime = new Date(new Date().setDate(new Date().getDate() - 2)).getTime();
 
   _.forOwn(obj, (shardOrders, shard) => {
     obj[shard] = _.groupBy(shardOrders, (order) => order.resourceType);
   });
 
   const datedDailyReports = {};
-  _.forEach(obj, (shardOrders,shardNumber) => {
+  _.forEach(obj, (shardOrders, shardNumber) => {
     _.forOwn(shardOrders, (reports) => {
-        _.forEach(reports, (report) => {
-            const reportTime =new Date(report.date).getTime();
-            if (reportTime < twoDaysAgoTime) {
-                if (!datedDailyReports[reportTime]) datedDailyReports[reportTime] = {};
-                if (!datedDailyReports[reportTime][shardNumber]) datedDailyReports[reportTime][shardNumber] = [];
-                datedDailyReports[reportTime][shardNumber].push(report);
-            }
-        });
-    });
-});
-
-    _.forEach(datedDailyReports, (shardReports, reportTime) => {
-        let json = JSON.stringify(shardReports);
-        const time = Math.floor(reportTime);
-        try {
-          const uploaded = JSON.parse(fs.readFileSync(`./dailyFiles/${Math.floor(reportTime)}.json`));
-          const shards = Object.keys(uploaded);
-          for (let i = 0; i < shards.length; i++) {
-            const shard = shards[i];
-            if (!shardReports[shard]) shardReports[shard] = uploaded[shard];
-          }
-          json = JSON.stringify(shardReports);
-          if (process.env.RELAY_PORT) client.write(shardReports, function(err) {
-            if (err) logger.error(err)
-          });
-          fs.writeFileSync(`./dailyFiles/${time}.json`, json);
-        } catch (error) {
-          fs.writeFileSync(`./dailyFiles/${time}.json`, json);
+      _.forEach(reports, (report) => {
+        const reportTime = new Date(report.date).getTime();
+        if (reportTime < twoDaysAgoTime) {
+          if (!datedDailyReports[reportTime]) datedDailyReports[reportTime] = {};
+          if (!datedDailyReports[reportTime][shardNumber]) datedDailyReports[reportTime][shardNumber] = [];
+          datedDailyReports[reportTime][shardNumber].push(report);
         }
+      });
     });
+  });
+
+  _.forEach(datedDailyReports, (shardReports, reportTime) => {
+    let json = JSON.stringify(shardReports);
+    const time = Math.floor(reportTime);
+    const fileName = `./dailyFiles/${time}.json`;
+
+    try {
+      const uploaded = JSON.parse(fs.readFileSync(`./dailyFiles/${time}.json`));
+      const shards = Object.keys(uploaded);
+      for (let i = 0; i < shards.length; i++) {
+        const shard = shards[i];
+        if (!shardReports[shard]) shardReports[shard] = uploaded[shard];
+      }
+      json = JSON.stringify(shardReports);
+      if (process.env.RELAY_PORT) {
+        const data = convertDailyData(shardReports);
+        client.write(data, time, function (err) {
+          if (err) logger.error(err)
+        });
+      }
+      fs.writeFileSync(fileName, json);
+    } catch (error) {
+      fs.writeFileSync(fileName, json);
+    }
+  });
 }
 
 export default function DailyData(
