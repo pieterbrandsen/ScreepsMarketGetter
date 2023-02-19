@@ -56,7 +56,7 @@ async function UploadJson(obj) {
       json = JSON.stringify(shardReports);
       if (process.env.RELAY_PORT) {
         const data = convertDailyData(shardReports);
-        client.write(data, time, function (err) {
+        client.write({ market: data }, time, function (err) {
           if (err) logger.error(err)
         });
       }
