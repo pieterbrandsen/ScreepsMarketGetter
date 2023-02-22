@@ -24,14 +24,14 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
+  "id": 5,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "datasource": {
         "type": "graphite",
-        "uid": "P66A2574FF36FD84D"
+        "uid": "P1D261A8554D2DA69"
       },
       "fieldConfig": {
         "defaults": {
@@ -39,6 +39,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -95,7 +97,8 @@
         "legend": {
           "calcs": [],
           "displayMode": "list",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -106,34 +109,11 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "3wdxQJMVz"
-          },
-          "hide": true,
-          "refCount": 1,
-          "refId": "A",
-          "target": "$Shards.*.volume"
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "3wdxQJMVz"
-          },
-          "hide": true,
-          "refCount": 1,
-          "refId": "C",
-          "target": "$Shards.*.avgPrice"
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "3wdxQJMVz"
+            "uid": "P1D261A8554D2DA69"
           },
           "hide": false,
-          "refCount": 0,
-          "refId": "B",
-          "target": "alias(movingAverage(sumSeries(multiplySeriesLists(#A, #C)), $Average_over_days), 'Total')",
-          "targetFull": "alias(movingAverage(sumSeries(multiplySeriesLists($Shards.*.volume, $Shards.*.avgPrice)), $Average_over_days), 'Total')",
-          "textEditor": true
+          "refId": "A",
+          "target": "alias(movingAverage(groupByNode(market.overview.shard0.meanCreditFlow.*, 0, 'sumSeries'), $Average_over_days), 'Total', false)"
         }
       ],
       "title": "Daily credit flow",
@@ -142,7 +122,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "P66A2574FF36FD84D"
+        "uid": "P1D261A8554D2DA69"
       },
       "fieldConfig": {
         "defaults": {
@@ -150,6 +130,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -210,7 +192,8 @@
             "max"
           ],
           "displayMode": "table",
-          "placement": "right"
+          "placement": "right",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -221,33 +204,11 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "3wdxQJMVz"
-          },
-          "hide": true,
-          "refCount": 1,
-          "refId": "A",
-          "target": "$Shards.*.volume"
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "3wdxQJMVz"
-          },
-          "hide": true,
-          "refCount": 1,
-          "refId": "C",
-          "target": "$Shards.*.avgPrice"
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "3wdxQJMVz"
+            "uid": "P1D261A8554D2DA69"
           },
           "hide": false,
-          "refCount": 0,
-          "refId": "B",
-          "target": "aliasByNode(movingAverage(groupByNode(multiplySeriesLists(#A, #C), 0, 'sumSeries'), $Average_over_days), 0)",
-          "targetFull": "aliasByNode(movingAverage(groupByNode(multiplySeriesLists($Shards.*.volume, $Shards.*.avgPrice), 0, 'sumSeries'), $Average_over_days), 0)"
+          "refId": "A",
+          "target": "aliasByNode(movingAverage(groupByNode(market.overview.*.meanCreditFlow.*, 2, 'sumSeries'), $Average_over_days), 0)"
         }
       ],
       "title": "Daily credit flow per shard",
@@ -256,7 +217,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "P66A2574FF36FD84D"
+        "uid": "P1D261A8554D2DA69"
       },
       "fieldConfig": {
         "defaults": {
@@ -289,8 +250,9 @@
         "legend": {
           "displayMode": "table",
           "placement": "right",
+          "showLegend": true,
           "sortBy": "Value",
-          "sortDesc": true,
+          "sortDesc": false,
           "values": [
             "value"
           ]
@@ -312,33 +274,11 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "3wdxQJMVz"
-          },
-          "hide": true,
-          "refCount": 1,
-          "refId": "A",
-          "target": "$Shards.*.volume"
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "3wdxQJMVz"
-          },
-          "hide": true,
-          "refCount": 1,
-          "refId": "C",
-          "target": "$Shards.*.avgPrice"
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "3wdxQJMVz"
+            "uid": "P1D261A8554D2DA69"
           },
           "hide": false,
-          "refCount": 0,
-          "refId": "B",
-          "target": "aliasByNode(movingAverage(groupByNode(multiplySeriesLists(#A, #C), 1, 'sumSeries'), $Average_over_days), 0)",
-          "targetFull": "aliasByNode(movingAverage(groupByNode(multiplySeriesLists($Shards.*.volume, $Shards.*.avgPrice), 1, 'sumSeries'), $Average_over_days), 0)"
+          "refId": "A",
+          "target": "groupByNode(market.overview.*.meanCreditFlow.*, 4, 'sumSeries')"
         }
       ],
       "title": "Mean credit flow",
@@ -347,7 +287,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "P66A2574FF36FD84D"
+        "uid": "P1D261A8554D2DA69"
       },
       "fieldConfig": {
         "defaults": {
@@ -355,6 +295,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -414,7 +356,8 @@
             "max"
           ],
           "displayMode": "table",
-          "placement": "right"
+          "placement": "right",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "single",
@@ -425,11 +368,11 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "3wdxQJMVz"
+            "uid": "P1D261A8554D2DA69"
           },
           "hide": false,
           "refId": "A",
-          "target": "aliasByNode(movingAverage(groupByNode($Shards.*.transactions, 0, 'sumSeries'), $Average_over_days), 0)"
+          "target": "aliasByNode(movingAverage(groupByNode(market.overview.*.transactions, 2, 'sumSeries'), $Average_over_days), 0)"
         }
       ],
       "title": "Transaction count per shard",
@@ -451,7 +394,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "P66A2574FF36FD84D"
+        "uid": "P1D261A8554D2DA69"
       },
       "fieldConfig": {
         "defaults": {
@@ -459,6 +402,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -520,6 +465,7 @@
           ],
           "displayMode": "table",
           "placement": "right",
+          "showLegend": true,
           "sortBy": "Mean",
           "sortDesc": true
         },
@@ -532,33 +478,33 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "3wdxQJMVz"
+            "uid": "P1D261A8554D2DA69"
           },
           "hide": true,
-          "refCount": 1,
+          "refCount": 0,
           "refId": "A",
-          "target": "$Shards.$Resources.volume"
+          "target": "market.$Shards.$Resources.volume"
         },
         {
           "datasource": {
             "type": "graphite",
-            "uid": "3wdxQJMVz"
+            "uid": "P1D261A8554D2DA69"
           },
           "hide": true,
-          "refCount": 1,
+          "refCount": 0,
           "refId": "C",
-          "target": "$Shards.$Resources.avgPrice"
+          "target": "market.$Shards.$Resources.avgPrice"
         },
         {
           "datasource": {
             "type": "graphite",
-            "uid": "3wdxQJMVz"
+            "uid": "P1D261A8554D2DA69"
           },
           "hide": false,
           "refCount": 0,
           "refId": "B",
-          "target": "aliasByNode(movingAverage(groupByNode(multiplySeriesLists(#A, #C), 1, 'sumSeries'), $Average_over_days), 0)",
-          "targetFull": "aliasByNode(movingAverage(groupByNode(multiplySeriesLists($Shards.$Resources.volume, $Shards.$Resources.avgPrice), 1, 'sumSeries'), $Average_over_days), 0)"
+          "target": "aliasByNode(movingAverage(groupByNode(multiplySeriesLists(#A, #C), 2, 'sumSeries'), $Average_over_days), 0)",
+          "targetFull": "aliasByNode(movingAverage(groupByNode(multiplySeriesLists(market.$Shards.$Resources.volume, market.$Shards.$Resources.avgPrice), 2, 'sumSeries'), $Average_over_days), 0)"
         }
       ],
       "title": "Credit flow",
@@ -567,7 +513,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "P66A2574FF36FD84D"
+        "uid": "P1D261A8554D2DA69"
       },
       "fieldConfig": {
         "defaults": {
@@ -575,6 +521,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -636,6 +584,7 @@
           ],
           "displayMode": "table",
           "placement": "right",
+          "showLegend": true,
           "sortBy": "Mean",
           "sortDesc": true
         },
@@ -648,33 +597,33 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "3wdxQJMVz"
+            "uid": "P1D261A8554D2DA69"
           },
           "hide": true,
-          "refCount": 1,
+          "refCount": 0,
           "refId": "A",
-          "target": "$Shards.$Resources.volume"
+          "target": "market.$Shards.$Resources.volume"
         },
         {
           "datasource": {
             "type": "graphite",
-            "uid": "3wdxQJMVz"
+            "uid": "P1D261A8554D2DA69"
           },
           "hide": true,
-          "refCount": 1,
+          "refCount": 0,
           "refId": "C",
-          "target": "$Shards.$Resources.avgPrice"
+          "target": "market.$Shards.$Resources.avgPrice"
         },
         {
           "datasource": {
             "type": "graphite",
-            "uid": "3wdxQJMVz"
+            "uid": "P1D261A8554D2DA69"
           },
           "hide": false,
           "refCount": 0,
           "refId": "B",
-          "target": "aliasByNode(removeZeroSeries(movingAverage(groupByNodes(multiplySeriesLists(#A, #C), 'sumSeries', 0, 1), $Average_over_days)), 0, 1)",
-          "targetFull": "aliasByNode(removeZeroSeries(movingAverage(groupByNodes(multiplySeriesLists($Shards.$Resources.volume, $Shards.$Resources.avgPrice), 'sumSeries', 0, 1), $Average_over_days)), 0, 1)"
+          "target": "aliasByNode(removeZeroSeries(movingAverage(groupByNodes(multiplySeriesLists(#A, #C), 'sumSeries', 1, 2), $Average_over_days)), 0, 1)",
+          "targetFull": "aliasByNode(removeZeroSeries(movingAverage(groupByNodes(multiplySeriesLists(market.$Shards.$Resources.volume, market.$Shards.$Resources.avgPrice), 'sumSeries', 1, 2), $Average_over_days)), 0, 1)"
         }
       ],
       "title": "Credit flow per shard",
@@ -683,7 +632,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "P66A2574FF36FD84D"
+        "uid": "P1D261A8554D2DA69"
       },
       "fieldConfig": {
         "defaults": {
@@ -691,6 +640,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -751,6 +702,7 @@
           ],
           "displayMode": "table",
           "placement": "right",
+          "showLegend": true,
           "sortBy": "Mean",
           "sortDesc": true
         },
@@ -763,11 +715,11 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "3wdxQJMVz"
+            "uid": "P1D261A8554D2DA69"
           },
           "hide": false,
           "refId": "A",
-          "target": "aliasByNode(movingAverage(groupByNode($Shards.$Resources.transactions, 1, 'sum'), $Average_over_days), 0)"
+          "target": "aliasByNode(movingAverage(groupByNode(market.$Shards.$Resources.transactions, 2, 'sum'), $Average_over_days), 0)"
         }
       ],
       "title": "Transaction count",
@@ -776,7 +728,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "P66A2574FF36FD84D"
+        "uid": "P1D261A8554D2DA69"
       },
       "fieldConfig": {
         "defaults": {
@@ -784,6 +736,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -844,6 +798,7 @@
           ],
           "displayMode": "table",
           "placement": "right",
+          "showLegend": true,
           "sortBy": "Mean",
           "sortDesc": true
         },
@@ -856,11 +811,11 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "3wdxQJMVz"
+            "uid": "P1D261A8554D2DA69"
           },
           "hide": false,
           "refId": "A",
-          "target": "aliasByNode(removeZeroSeries(movingAverage($Shards.$Resources.transactions, $Average_over_days)), 0, 1)"
+          "target": "aliasByNode(removeZeroSeries(movingAverage(market.$Shards.$Resources.transactions, $Average_over_days)), 1, 2)"
         }
       ],
       "title": "Transaction count per shard",
@@ -869,7 +824,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "P66A2574FF36FD84D"
+        "uid": "P1D261A8554D2DA69"
       },
       "fieldConfig": {
         "defaults": {
@@ -877,6 +832,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -909,8 +866,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -937,6 +893,7 @@
           ],
           "displayMode": "table",
           "placement": "right",
+          "showLegend": true,
           "sortBy": "Mean",
           "sortDesc": true
         },
@@ -949,11 +906,11 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "3wdxQJMVz"
+            "uid": "P1D261A8554D2DA69"
           },
           "hide": false,
           "refId": "A",
-          "target": "aliasByNode(movingAverage(groupByNode($Shards.$Resources.avgPrice, 1, 'averageSeries'), $Average_over_days), 0)"
+          "target": "aliasByNode(movingAverage(groupByNode(market.$Shards.$Resources.avgPrice, 2, 'averageSeries'), $Average_over_days), 0)"
         }
       ],
       "title": "Avgerage price",
@@ -962,7 +919,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "P66A2574FF36FD84D"
+        "uid": "P1D261A8554D2DA69"
       },
       "fieldConfig": {
         "defaults": {
@@ -970,6 +927,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -1002,8 +961,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1030,6 +988,7 @@
           ],
           "displayMode": "table",
           "placement": "right",
+          "showLegend": true,
           "sortBy": "Mean",
           "sortDesc": true
         },
@@ -1042,11 +1001,11 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "3wdxQJMVz"
+            "uid": "P1D261A8554D2DA69"
           },
           "hide": false,
           "refId": "A",
-          "target": "aliasByNode(removeZeroSeries(movingAverage($Shards.$Resources.avgPrice, $Average_over_days)), 0, 1)"
+          "target": "aliasByNode(removeZeroSeries(movingAverage(market.$Shards.$Resources.avgPrice, $Average_over_days)), 1, 2)"
         }
       ],
       "title": "Avgerage price per shard",
@@ -1055,7 +1014,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "P66A2574FF36FD84D"
+        "uid": "P1D261A8554D2DA69"
       },
       "fieldConfig": {
         "defaults": {
@@ -1063,6 +1022,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -1095,8 +1056,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1123,6 +1083,7 @@
           ],
           "displayMode": "table",
           "placement": "right",
+          "showLegend": true,
           "sortBy": "Mean",
           "sortDesc": true
         },
@@ -1135,11 +1096,11 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "3wdxQJMVz"
+            "uid": "P1D261A8554D2DA69"
           },
           "hide": false,
           "refId": "A",
-          "target": "aliasByNode(movingAverage(groupByNode($Shards.$Resources.volume, 1, 'sumSeries'), $Average_over_days), 0)"
+          "target": "aliasByNode(movingAverage(groupByNode(market.$Shards.$Resources.volume, 2, 'sumSeries'), $Average_over_days), 0)"
         }
       ],
       "title": "Volume",
@@ -1148,7 +1109,7 @@
     {
       "datasource": {
         "type": "graphite",
-        "uid": "P66A2574FF36FD84D"
+        "uid": "P1D261A8554D2DA69"
       },
       "fieldConfig": {
         "defaults": {
@@ -1156,6 +1117,8 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -1188,8 +1151,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1216,6 +1178,7 @@
           ],
           "displayMode": "table",
           "placement": "right",
+          "showLegend": true,
           "sortBy": "Mean",
           "sortDesc": true
         },
@@ -1228,11 +1191,11 @@
         {
           "datasource": {
             "type": "graphite",
-            "uid": "3wdxQJMVz"
+            "uid": "P1D261A8554D2DA69"
           },
           "hide": false,
           "refId": "A",
-          "target": "aliasByNode(removeZeroSeries(movingAverage($Shards.$Resources.volume, $Average_over_days)), 0, 1)"
+          "target": "aliasByNode(removeZeroSeries(movingAverage(market.$Shards.$Resources.volume, $Average_over_days)), 1, 2)"
         }
       ],
       "title": "Volume per shard",
@@ -1240,7 +1203,7 @@
     }
   ],
   "refresh": false,
-  "schemaVersion": 36,
+  "schemaVersion": 37,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -1257,7 +1220,7 @@
         },
         "datasource": {
           "type": "graphite",
-          "uid": "P66A2574FF36FD84D"
+          "uid": "P1D261A8554D2DA69"
         },
         "definition": "*",
         "hide": 0,
@@ -1265,9 +1228,13 @@
         "multi": true,
         "name": "Shards",
         "options": [],
-        "query": "*",
+        "query": {
+          "queryType": "Default",
+          "refId": "A",
+          "target": "market.*"
+        },
         "refresh": 1,
-        "regex": "/shard/",
+        "regex": "",
         "skipUrlSync": false,
         "sort": 1,
         "type": "query"
@@ -1284,7 +1251,7 @@
         },
         "datasource": {
           "type": "graphite",
-          "uid": "P66A2574FF36FD84D"
+          "uid": "P1D261A8554D2DA69"
         },
         "definition": "${Shards}.*",
         "hide": 0,
@@ -1292,7 +1259,11 @@
         "multi": true,
         "name": "Resources",
         "options": [],
-        "query": "${Shards}.*",
+        "query": {
+          "queryType": "Default",
+          "refId": "A",
+          "target": "market.${Shards}.*"
+        },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -1302,8 +1273,8 @@
       {
         "current": {
           "selected": true,
-          "text": "10",
-          "value": "10"
+          "text": "30",
+          "value": "30"
         },
         "hide": 0,
         "includeAll": false,
@@ -1318,16 +1289,21 @@
           },
           {
             "selected": false,
-            "text": "5",
-            "value": "5"
+            "text": "7",
+            "value": "7"
           },
           {
             "selected": true,
-            "text": "10",
-            "value": "10"
+            "text": "30",
+            "value": "30"
+          },
+          {
+            "selected": false,
+            "text": "90",
+            "value": "90"
           }
         ],
-        "query": "1, 5, 10",
+        "query": "1, 7, 30, 90",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
@@ -1342,6 +1318,6 @@
   "timezone": "",
   "title": "DailyData",
   "uid": "siWxqJGVk",
-  "version": 1,
+  "version": 6,
   "weekStart": ""
 }
