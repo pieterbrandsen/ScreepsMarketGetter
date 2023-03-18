@@ -16,10 +16,10 @@ app.get('/', (req, res) => {
   const lastCompleteFile = fs.readdirSync('./completeFiles').sort().reverse()[0];
   const now = new Date();
   
-  const diffDailyDays = Math.ceil(Math.abs(parseInt(now.getTime()) - parseInt(lastDailyFile)) / (1000 * 60 * 60 * 7));
-  const diffCompleteMinutes = Math.ceil(Math.abs(parseInt(now.getTime()) - parseInt(lastCompleteFile)) / (1000 * 600));
+  const diffDailyDays = Math.ceil(Math.abs(parseInt(now.getTime()) - parseInt(lastDailyFile)) / (1000 * 60 * 60 * 24));
+  const diffCompleteMinutes = Math.ceil(Math.abs(parseInt(now.getTime()) - parseInt(lastCompleteFile)) / (1000 * 60));
 
-  const online = diffDailyDays < 5 && diffCompleteMinutes < 60;
+  const online = diffDailyDays < 10 && diffCompleteMinutes < 600;
   res.send({result: online, lastDailyFile, lastCompleteFile, diffDailyDays, diffCompleteMinutes})
 })
 app.listen(port, () => {
