@@ -7,7 +7,7 @@ services:
     build: .
     restart: unless-stopped
     volumes:
-      - "./dailyFiles:dailyFiles"
-      - "./completeFiles:completeFiles"
-      - "./compressedFiles:compressedFiles"
-      - "./logs:logs"
+      - "./dailyFiles:/usr/screepsmarket/dailyFiles"
+      - "./completeFiles:/usr/screepsmarket/completeFiles"
+      - "./compressedFiles:/usr/screepsmarket/compressedFiles"
+      - "./logs:/usr/screepsmarket/logs"
