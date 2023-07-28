@@ -1,6 +1,7 @@
 import { ScreepsAPI } from "screeps-api";
 import _ from "lodash";
 import winston from "winston";
+import 'winston-daily-rotate-file';
 import detailedData from "./src/detailedData.js";
 import dailyData from "./src/dailyData.js";
 import fs from "fs";
@@ -32,8 +33,14 @@ const logger = winston.createLogger({
     winston.format.json()
   ),
   transports: [
-    new winston.transports.Console(),
-    new winston.transports.File({ filename: "logs/log.log" }),
+    new transports.DailyRotateFile({
+      filename: `logs/application-%DATE%.log`,
+      auditFile: `logs/audit.json`,
+      datePattern: 'YYYY-MM-DD',
+      zippedArchive: true,
+      maxSize: '20m',
+      maxFiles: '14d'
+    })
   ],
 });
 
