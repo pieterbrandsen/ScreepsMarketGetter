@@ -9,8 +9,14 @@ const logger = winston.createLogger({
     winston.format.json()
   ),
   transports: [
-    new winston.transports.Console(),
-    new winston.transports.File({ filename: "log.log" }),
+    new transports.DailyRotateFile({
+      filename: `logs/detailedData/application-%DATE%.log`,
+      auditFile: `logs/detailedData/audit.json`,
+      datePattern: 'YYYY-MM-DD',
+      zippedArchive: true,
+      maxSize: '20m',
+      maxFiles: '14d'
+    })
   ],
 });
 
