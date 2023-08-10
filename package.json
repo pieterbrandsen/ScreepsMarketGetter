@@ -16,6 +16,7 @@
     "graphite": "^0.1.5",
     "lodash": "^4.17.21",
     "screeps-api": "^1.16.0",
-    "winston": "^3.7.2"
+    "winston": "^3.7.2",
+    "winston-daily-rotate-file": "^4.7.1"
   }
 }

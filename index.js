@@ -1,6 +1,6 @@
 import { ScreepsAPI } from "screeps-api";
 import _ from "lodash";
-import winston from "winston";
+import { createLogger, format, transports } from 'winston';
 import 'winston-daily-rotate-file';
 import detailedData from "./src/detailedData.js";
 import dailyData from "./src/dailyData.js";
@@ -27,10 +27,10 @@ app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`)
 })
 
-const logger = winston.createLogger({
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.json()
+const logger = createLogger({
+  format: format.combine(
+    format.timestamp(),
+    format.json()
   ),
   transports: [
     new transports.DailyRotateFile({

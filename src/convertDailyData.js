@@ -1,5 +1,3 @@
-import fs from 'fs'
-
 function ConvertDailyData(data) {
     data = ConvertData(data)
     let result = {}

@@ -1,12 +1,11 @@
 import fs from "fs";
-import compressor from "./compress.js";
 import _ from "lodash";
-import winston from "winston";
+import { createLogger, format, transports } from 'winston';
 
-const logger = winston.createLogger({
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.json()
+const logger = createLogger({
+  format: format.combine(
+    format.timestamp(),
+    format.json()
   ),
   transports: [
     new transports.DailyRotateFile({
