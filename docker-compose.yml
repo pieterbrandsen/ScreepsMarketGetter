@@ -6,6 +6,8 @@ services:
       - "10000:10000"
     build: .
     restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - "./dailyFiles:/usr/screepsmarket/dailyFiles"
       - "./completeFiles:/usr/screepsmarket/completeFiles"

@@ -1,16 +1,25 @@
+import 'dotenv/config'
+import 'winston-daily-rotate-file';
 import { ScreepsAPI } from "screeps-api";
 import _ from "lodash";
 import { createLogger, format, transports } from 'winston';
-import 'winston-daily-rotate-file';
-import detailedData from "./src/detailedData.js";
-import dailyData from "./src/dailyData.js";
+import detailedData from "./detailedData.js";
+import dailyData from "./market/dailyData.js";
 import fs from "fs";
-import * as dotenv from 'dotenv' // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 import express from 'express'
 
-dotenv.config()
 const app = express()
-const port = 10000
+const port = process.env.PORT
+
+const emptyShardsData = {
+  shard0: [],
+  shard1: [],
+  shard2: [],
+  shard3: [],
+};
+
+let detailedShardsData = {}
+let dailyShardsData = {}
 
 app.get('/', (req, res) => {
   const lastDailyFile = fs.readdirSync('./dailyFiles').sort().reverse()[0];
@@ -21,7 +30,7 @@ app.get('/', (req, res) => {
   const diffCompleteMinutes = Math.ceil(Math.abs(parseInt(now.getTime()) - parseInt(lastCompleteFile)) / (1000 * 60));
 
   const online = diffDailyDays < 10 && diffCompleteMinutes < 600;
-  res.send({ result: online, lastDailyFile, lastCompleteFile, diffDailyDays, diffCompleteMinutes })
+  res.send({ result: online, lastDailyFile, lastCompleteFile, diffDailyDays, diffCompleteMinutes, detailedShardsData, dailyShardsData })
 })
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`)
@@ -46,26 +55,12 @@ const logger = createLogger({
 
 (async function () {
   try {
-    // Setup
     const api = new ScreepsAPI();
-    await api.auth(process.env.SCREEPS_USERNAME, process.env.SCREEPS_PASSWORD); // authenticate
-    await api.socket.connect(); // connect socket
+    await api.auth(process.env.SCREEPS_USERNAME, process.env.SCREEPS_PASSWORD);
+    await api.socket.connect();
 
-    const emptyDetailedShardsData = {
-      shard0: [],
-      shard1: [],
-      shard2: [],
-      shard3: [],
-    };
-    let detailedShardsData = _.clone(emptyDetailedShardsData);
-
-    const emptyDailyShardsData = {
-      shard0: [],
-      shard1: [],
-      shard2: [],
-      shard3: [],
-    };
-    let dailyShardsData = _.clone(emptyDailyShardsData);
+    detailedShardsData = _.clone(emptyShardsData);
+    dailyShardsData = _.clone(emptyShardsData);
     api.socket.subscribe("console", (event) => {
       const data = event.data;
       const currentTime = Date.now();
@@ -75,14 +70,17 @@ const logger = createLogger({
       const detailedMarketData = event.data.messages.log.find((message) =>
         message.startsWith('[{"created')
       );
-      if (detailedMarketData)
+      if (detailedMarketData) {
         detailedShardsData = detailedData(
           data.shard,
           detailedShardsData,
-          emptyDetailedShardsData,
+          emptyShardsData,
           detailedMarketData,
           currentTime
         );
+        logger.info(`Detailed data for shard ${data.shard} received`);
+      }
+
       const dailyMarketData = event.data.messages.log.find((message) =>
         message.startsWith('[{"resourceType')
       );
@@ -90,9 +88,8 @@ const logger = createLogger({
         dailyShardsData = dailyData(
           data.shard,
           dailyShardsData,
-          emptyDailyShardsData,
+          emptyShardsData,
           dailyMarketData,
-          currentTime
         );
         logger.info(`Daily data for shard ${data.shard} received`);
       }
