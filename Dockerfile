@@ -11,4 +11,4 @@ COPY . .
 
 RUN npm install --production
 
-CMD [ "node", "fm.js" ]
+CMD [ "node", "src/index.js" ]
