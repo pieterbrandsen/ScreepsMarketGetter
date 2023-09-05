@@ -3,7 +3,7 @@ import 'winston-daily-rotate-file';
 import { ScreepsAPI } from "screeps-api";
 import _ from "lodash";
 import { createLogger, format, transports } from 'winston';
-import detailedData from "./detailedData.js";
+import detailedData from "./market/detailedData.js";
 import dailyData from "./market/dailyData.js";
 import fs from "fs";
 import express from 'express'
