@@ -30,7 +30,15 @@ app.get('/', (req, res) => {
   const diffCompleteMinutes = Math.ceil(Math.abs(parseInt(now.getTime()) - parseInt(lastCompleteFile)) / (1000 * 60));
 
   const online = diffDailyDays < 10 && diffCompleteMinutes < 600;
-  res.send({ result: online, lastDailyFile, lastCompleteFile, diffDailyDays, diffCompleteMinutes, detailedShardsData, dailyShardsData })
+  const statusDetailedShards = {}
+  const statusDailyShards = {};
+  const shardNames = Object.keys(emptyShardsData);
+  for (let s = 0; s < shardNames.length; s += 1) {
+    const shardName = shardNames[s];
+    statusDailyShards[shardName] = dailyShardsData[shardName].length;
+    statusDetailedShards[shardName] = detailedShardsData[shardName].length;
+  }
+  res.send({ result: online, lastDailyFile, lastCompleteFile, diffDailyDays, diffCompleteMinutes, detailedShardsData: statusDetailedShards, dailyShardsData: statusDailyShards })
 })
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`)
