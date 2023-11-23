@@ -7,6 +7,11 @@ import detailedData from "./market/detailedData.js";
 import dailyData from "./market/dailyData.js";
 import fs from "fs";
 import express from 'express'
+import cron from 'node-cron';
+import screepsAPI from 'screeps-advanced-api';
+import graphite from "graphite";
+
+const client = graphite.createClient(`plaintext://host.docker.internal:${process.env.RELAY_PORT}/`);
 
 const app = express()
 const port = process.env.PORT
@@ -106,3 +111,19 @@ const logger = createLogger({
         logger.error(error);
     }
 })();
+
+async function writeLeaderboard() {
+    try {
+        logger.info('\r\Pull leaderboard event hit: ', new Date());
+        const api = new screepsAPI(process.env.SCREEPS_TOKEN);
+        const leaderboard = await api.getAllUsers();
+        client.write({ "data.screeps.leaderboard": leaderboard }, function (err) { });
+    } catch (error) {
+        logger.error(error);
+    }
+}
+
+cron.schedule('0 */6 * * *', async () => {
+    await writeLeaderboard();
+});
+writeLeaderboard();
