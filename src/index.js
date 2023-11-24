@@ -117,13 +117,18 @@ async function writeLeaderboard() {
         logger.info('\r\Pull leaderboard event hit: ', new Date());
         const api = new screepsAPI(process.env.SCREEPS_TOKEN);
         const leaderboard = await api.getAllUsers();
-        client.write({ "data.screeps.leaderboard": leaderboard }, function (err) { });
+        const users = {};
+        for (let i = 0; i < leaderboard.length; i += 1) {
+            const user = leaderboard[i];
+            users[user.username] = user;
+        }
+        client.write({ "data.screeps.leaderboard": users }, function (err) { });
     } catch (error) {
         logger.error(error);
     }
 }
 
-cron.schedule('0 */6 * * *', async () => {
-    await writeLeaderboard();
-});
+// cron.schedule('0 */6 * * *', async () => {
+//     await writeLeaderboard();
+// });
 writeLeaderboard();
