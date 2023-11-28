@@ -128,7 +128,7 @@ async function writeLeaderboard() {
     }
 }
 
-// cron.schedule('0 */6 * * *', async () => {
-//     await writeLeaderboard();
-// });
+cron.schedule('0 */6 * * *', async () => {
+    await writeLeaderboard();
+});
 writeLeaderboard();
