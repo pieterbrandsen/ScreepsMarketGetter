@@ -14,7 +14,7 @@ import graphite from "graphite";
 const client = graphite.createClient(`plaintext://host.docker.internal:${process.env.RELAY_PORT}/`);
 
 const app = express()
-const port = process.env.PORT
+const port = process.env.API_PORT
 
 const emptyShardsData = {
     shard0: [],
@@ -69,7 +69,7 @@ const logger = createLogger({
 (async function () {
     try {
         const api = new ScreepsAPI();
-        await api.auth(process.env.SCREEPS_USERNAME, process.env.SCREEPS_PASSWORD);
+        await api.auth({ token: process.env.SCREEPS_TOKEN });
         await api.socket.connect();
 
         detailedShardsData = _.clone(emptyShardsData);
