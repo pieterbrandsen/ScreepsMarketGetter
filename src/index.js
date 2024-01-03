@@ -69,7 +69,7 @@ const logger = createLogger({
 (async function () {
     try {
         const api = new ScreepsAPI();
-        await api.auth({ token: process.env.SCREEPS_TOKEN });
+        await api.auth(process.env.SCREEPS_USERNAME, process.env.SCREEPS_PASSWORD);
         await api.socket.connect();
 
         detailedShardsData = _.clone(emptyShardsData);
