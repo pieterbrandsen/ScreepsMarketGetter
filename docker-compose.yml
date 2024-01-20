@@ -1,11 +1,15 @@
-version: '3'
+version: "3"
 
 services:
   nodejs:
-    ports:
-      - "10000:10000"
     build: .
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.screepsMarket.rule=Host(`screepsmarketapi.pandascreeps.com`)"
+      - "traefik.docker.network=traefik-net"
+      - "traefik.http.routers.screepsMarket.entrypoints=websecure"
+      - "traefik.http.routers.screepsMarket.tls.certresolver=letsencrypt"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
