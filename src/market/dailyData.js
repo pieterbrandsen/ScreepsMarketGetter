@@ -41,7 +41,7 @@ async function UploadJson(obj) {
       json = JSON.stringify(shardReports);
       if (process.env.RELAY_PORT) {
         const data = convertDailyData(shardReports);
-        client.write({ "data.screeps.market": data }, time, function (err) {
+        client.write({ [`${process.env.STATS_PREFIX}.screeps.market`]: data }, time, function (err) {
         });
       }
       fs.writeFileSync(fileName, json);

@@ -7,7 +7,8 @@ function UploadJson(obj, currentTime) {
   });
 
   let json = JSON.stringify(obj);
-  fs.writeFileSync(`./completeFiles/${Math.floor(currentTime)}.json`, json);
+  const roundedTime = new Date(Math.floor(currentTime / (15 * 60 * 1000)) * (15 * 60 * 1000));
+  fs.writeFileSync(`./completeFiles/${Math.floor(roundedTime)}.json`, json);
 }
 
 export default function DetailedData(
