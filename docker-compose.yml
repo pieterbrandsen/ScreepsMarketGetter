@@ -4,6 +4,8 @@ services:
   nodejs:
     build: .
     restart: unless-stopped
+    ports:
+      - "10000:10000"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.screepsMarket.rule=Host(`screepsmarketapi.pandascreeps.com`)"
