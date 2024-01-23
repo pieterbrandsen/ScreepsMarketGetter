@@ -5,8 +5,13 @@ A service which connects to the console socket where daily totals and/or current
 # Configuration
 
 Copy and rename `.env.example` to `.env`, fill in according to your needs.
-
 # Running
 
-1. Log in each shard the required data, like `console.log(Game.market.getHistory())`
-2. `docker-compose up -d` or `npm start`
+## Docker-compose
+
+Run `docker-compose up`
+
+## Node
+
+1. Run `npm install`
+2. Run `npm start`
